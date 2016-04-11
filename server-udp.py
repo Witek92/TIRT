@@ -4,16 +4,18 @@ import sys
 import select
 import os
 
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 server_address = ('localhost', 10000)
 print >>sys.stderr, 'Starting up on %s. Port %s' % server_address
 s.bind(server_address)
 
-file1 = open('file1.mp3', 'ab')
+file1 = open('file.mp3', 'ab')
 
-try:
-    while 1:
+
+while 1:
+
+    try:
         data, address = s.recvfrom(4096)
         
         #Printing out received data, e.g. text
@@ -23,10 +25,12 @@ try:
         s.settimeout(2)
         file1.write(data)
         
-except timeout:   
-    plik.close()
-    s.close()
-    print "Received"
+    except:
+        break
+
+file1.close()
+s.close()
+print "Received"
 
 
 
