@@ -26,6 +26,14 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
         Form.resize(482, 361)
+        self.analyse=QtGui.QToolButton(Form)
+        self.analyse.setGeometry(QtCore.QRect(130, 270, 101, 31))
+        self.analyse.setObjectName(_fromUtf8("Analiza"))
+
+        self.lowPass=QtGui.QToolButton(Form)
+        self.lowPass.setGeometry(QtCore.QRect(130, 310, 201, 31))
+        self.lowPass.setObjectName(_fromUtf8("LowPass"))
+
         self.sendTool = QtGui.QToolButton(Form)
         self.sendTool.setGeometry(QtCore.QRect(130, 230, 61, 31))
         self.sendTool.setObjectName(_fromUtf8("sendTool"))
@@ -58,10 +66,12 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form", None))
         self.sendTool.setText(_translate("Form", "Wyślij", None))
         self.recTool.setText(_translate("Form", "Odbierz", None))
+        self.analyse.setText(_translate("Form", "Wyświetl wykresy", None))
+        self.lowPass.setText(_translate("Form", "Filtr dolnoprzepustowy", None))
         self.IPsendTool.setText(_translate("Form", "127.0.0.1", None))
         self.IPrecTool.setText(_translate("Form", "127.0.0.1", None))
         self.PortsendTool.setText(_translate("Form", "50007", None))
         self.PortrecTool.setText(_translate("Form", "50007", None))
         self.FilegetTool.setText(_translate("Form", "Wybierz plik", None))
-        self.FilePath.setText(_translate("Form", "Ścieżka", None))
+        self.FilePath.setText(_translate("Form", "file.wav", None))
 

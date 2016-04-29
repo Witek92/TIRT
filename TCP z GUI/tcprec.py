@@ -5,9 +5,9 @@ class TcpRec(socket.socket):
     name = ""
     HOST = ''
     PORT = 0
-        
+
     def __init__(self):
-        TcpRec.name = "file.mp3"
+        TcpRec.name = "file2.wav"
         TcpRec.HOST = '127.0.0.1'
         TcpRec.PORT = 50007
     

@@ -1,10 +1,12 @@
 import sys
 import thread
 from PyQt4 import QtCore, QtGui
-from audioplay import WavePlay
+#from audioplay import WavePlay
 from gui1 import Ui_Form
 from tcpsender import TcpSend
 from tcprec import TcpRec
+import audioAnalysis
+import dolnoPrzepustowy
 
 class StartQT4(QtGui.QMainWindow):
     def __init__(self, parent=None):
@@ -12,7 +14,11 @@ class StartQT4(QtGui.QMainWindow):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         QtCore.QObject.connect(self.ui.sendTool,QtCore.SIGNAL("clicked()"), self.sending)
-        QtCore.QObject.connect(self.ui.recTool,QtCore.SIGNAL("clicked()"), self.receiving)
+        QtCore.QObject.connect(self.ui.recTool, QtCore.SIGNAL("clicked()"), self.receiving)
+        QtCore.QObject.connect(self.ui.analyse, QtCore.SIGNAL("clicked()"), audioAnalysis.run)
+        QtCore.QObject.connect(self.ui.lowPass, QtCore.SIGNAL("clicked()"), dolnoPrzepustowy.run)
+
+
                          
     def sending(self):
         sender = TcpSend()

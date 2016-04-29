@@ -9,7 +9,7 @@ class TcpSend(socket.socket):
     PORT = 0
         
     def __init__(self):
-        TcpSend.name = "file.mp3"
+        TcpSend.name = "file.wav"
         TcpSend.HOST = '127.0.0.1'
         TcpSend.PORT = 50007
     
