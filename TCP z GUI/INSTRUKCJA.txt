@@ -3,10 +3,10 @@
 
 S³u¿y do wyœwietlenia dwóch wykresów(plotów):
 
--czas od amplitudy
--czêstotliwoœæ od wartoœc modulacji czêstotliwoœci (nie jestem pewien nazwy :D)
+- Amplituda od czasu
+- Modulowana wartoœæ funkcji czêstotliwoœci od czêstotliwoœci (nie do koñca jestem pewien nazwy wykresu)
 
-dla pliku file.wav oraz file2.wav (na razie nazewnictwo jest sztywne, do stworzenia wykresów potrzeba plików file.wav oraz file2.wav)
+dla pliku file.wav oraz file2.wav (na razie nazewnictwo jest sztywne, do stworzenia wykresów potrzeba konkretnie plików file.wav oraz file2.wav)
 
 Wykresy mo¿na wyœwietlaæ poza powy¿szym warunkiem w ka¿dym momencie (po filtrach itd.)
 
