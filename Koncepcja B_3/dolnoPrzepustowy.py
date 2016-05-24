@@ -35,50 +35,53 @@ def lowPassRun(self):
     
         return channels
     
-    self.anyFilterAlive = True
-    
     fname = 'temp.wav'
 
     cutOffFrequency=float(self.ui.cutFreq.text())
     
     filePos = 0
     
+    self.ui.Prompt.setText("Filtr dolnoprzepustowy dziala")
+    
     tempData = ''
     while True:
-      if self.recor.flagR:
-        if self.data != tempData:
-            try:
-                spf = wave.open(fname,'rb')
-            except EOFError:
-                break
+        if self.filterRunningAllowed:
+            if self.recor.flagR:
+              if self.data != tempData:
+                  try:
+                      spf = wave.open(fname,'rb')
+                  except EOFError:
+                      break
+                  
+                  sampleRate = spf.getframerate()
+                  ampWidth = spf.getsampwidth()
+                  nChannels = spf.getnchannels()
+                  nFrames = 512
+                  
+                  spf.setpos(filePos)
+                  # Extract Raw Audio from multi-channel Wav File
+                  signal = spf.readframes(nFrames*nChannels)
+                  spf.close()
+                  filePos += nFrames
+                  channels = interpret_wav(signal, nFrames, nChannels, ampWidth, True)
+          
+                  # from http://dsp.stackexchange.com/questions/9966/what-is-the-cut-off-frequency-of-a-moving-average-filter
+                  freqRatio = (cutOffFrequency/sampleRate)
+                  N = int(math.sqrt(0.196196 + freqRatio**2)/freqRatio)
+          
+                  # Use moving average (only on first channel)
+                  filtered = running_mean(channels[0], N).astype(channels.dtype)
+                  
+                  self.filteredData = filtered.tobytes('C')
+                  tempData = self.data
+              
+            else:
+              print "Filtr dolnoprzepustowy wykonany!"
+              self.filteredData = ''
+              break
+        else:
+            break
             
-            sampleRate = spf.getframerate()
-            ampWidth = spf.getsampwidth()
-            nChannels = spf.getnchannels()
-            nFrames = 512
-            
-            spf.setpos(filePos)
-            # Extract Raw Audio from multi-channel Wav File
-            signal = spf.readframes(nFrames*nChannels)
-            spf.close()
-            filePos += nFrames
-            channels = interpret_wav(signal, nFrames, nChannels, ampWidth, True)
-    
-            # from http://dsp.stackexchange.com/questions/9966/what-is-the-cut-off-frequency-of-a-moving-average-filter
-            freqRatio = (cutOffFrequency/sampleRate)
-            N = int(math.sqrt(0.196196 + freqRatio**2)/freqRatio)
-    
-            # Use moving average (only on first channel)
-            filtered = running_mean(channels[0], N).astype(channels.dtype)
-            
-            self.filteredData = filtered.tobytes('C')
-            tempData = self.data
-        
-      else:
-        print "Filtr dolnoprzepustowy wykonany!"
-        self.anyFilterAlive = False
-        self.filteredData = ''
-        break
 
 
 

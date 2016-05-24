@@ -32,7 +32,8 @@ class StartQT4(QtGui.QMainWindow):
         self.data = ''
         self.filteredData = ''
         self.recor = TcpRec()
-        self.anyFilterAlive = False
+        self.lowPassFilterRunCounter = 0
+        self.filterRunningAllowed = True
         
     def sending(self):            
         sender = TcpSend()          
@@ -56,9 +57,18 @@ class StartQT4(QtGui.QMainWindow):
         audioAnalysis.run() 
     
     def lowPassFilter(self):
-        self.savingFile('temp.wav')
+        if self.lowPassFilterRunCounter%2 == 0:
+            self.savingFile('temp.wav')
+            time.sleep(0.2)
+            thread.start_new_thread(self.lowPassRun, ())
+        else:
+            self.filterRunningAllowed = False
+            self.ui.Prompt.setText("Filtr dolnoprzepustowy wylaczony")
+            
+        self.lowPassFilterRunCounter += 1
         time.sleep(0.2)
-        thread.start_new_thread(self.lowPassRun, ())
+        self.filterRunningAllowed = True
+        
         
     def audioPlayer(self):
         player = WavePlay()
@@ -92,21 +102,24 @@ class StartQT4(QtGui.QMainWindow):
         def savingWav_forFilters():
             tempData = ''
             while True:
-                if self.recor.flagR: 
-                    if not self.data == tempData:
+                if self.filterRunningAllowed:
+                    if self.recor.flagR: 
+                        if not self.data == tempData:
+                            if not fs.fileName == 'temp.wav':
+                                if not self.ui.Prompt.text() == "Rozpoczeto zapis do pliku":
+                                    self.ui.Prompt.setText("Rozpoczeto zapis do pliku")
+                            
+                            fs.setData(self.data)
+                            fs.runWav()
+                            print 'Saved chunk to a file'
+                            tempData = self.data
+                            
+                    if not self.recor.flagA:
+                        fs.closeFile()
                         if not fs.fileName == 'temp.wav':
-                            if not self.ui.Prompt.text() == "Rozpoczeto zapis do pliku":
-                                self.ui.Prompt.setText("Rozpoczeto zapis do pliku")
-                        
-                        fs.setData(self.data)
-                        fs.runWav()
-                        print 'Saved chunk to a file'
-                        tempData = self.data
-                        
-                if not self.recor.flagA:
-                    fs.closeFile()
-                    if not fs.fileName == 'temp.wav':
-                        self.ui.Prompt.setText("Plik zapisano")
+                            self.ui.Prompt.setText("Plik zapisano")
+                        break
+                else:
                     break
         
         def savingWavStandard():
