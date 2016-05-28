@@ -12,7 +12,6 @@ from gui import Ui_MainWindow
 from tcpsender import TcpSend
 from tcprec import TcpRec
 import audioAnalysis
-from audioplay import WavePlay
 from FileSaver import FileSaver
 
 class StartQT4(QtGui.QMainWindow):
@@ -53,7 +52,7 @@ class StartQT4(QtGui.QMainWindow):
         thread.start_new_thread(self.gettingRecdData, ())
         
     def freqPlotting(self):
-        self.savingFile()
+        self.savingFile('temp.wav')
         audioAnalysis.run() 
     
     def lowPassFilter(self):
