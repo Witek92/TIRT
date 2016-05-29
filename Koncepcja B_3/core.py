@@ -13,6 +13,21 @@ from tcpsender import TcpSend
 from tcprec import TcpRec
 import audioAnalysis
 from FileSaver import FileSaver
+from guiEQ1 import Eq_Form
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class StartQT4(QtGui.QMainWindow):
     
@@ -28,6 +43,7 @@ class StartQT4(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.lowPass, QtCore.SIGNAL("clicked()"), self.lowPassFilter)
         #QtCore.QObject.connect(self.ui.FilePlayer, QtCore.SIGNAL("clicked()"), self.audioPlayer)
         QtCore.QObject.connect(self.ui.fileSaver, QtCore.SIGNAL("clicked()"), self.savingFile)
+        QtCore.QObject.connect(self.ui.buttonEqualizer, QtCore.SIGNAL("clicked()"), self.eqinit)
         self.data = ''
         self.filteredData = ''
         self.recor = TcpRec()
@@ -40,14 +56,14 @@ class StartQT4(QtGui.QMainWindow):
         sender.setHost(self.ui.IPsendTool.text())
         sender.setPort(int(self.ui.PortsendTool.text()))        
         thread.start_new_thread(sender.send, ())
-        self.ui.Prompt.setText("Wysylanie...")
+        self.ui.Prompt.setText(_translate("MainWindow", "Wysyłanie ...", None))
       
     def receiving(self):
         #recor = TcpRec()
         #recor.setName(self.ui.FilePath.text())
         self.recor.setHost(self.ui.IPrecTool.text())
         self.recor.setPort(int(self.ui.PortrecTool.text()))
-        self.ui.Prompt.setText("Oczekiwanie na połączenie...")
+        self.ui.Prompt.setText(_translate("MainWindow", "Oczekiwanie na połączenie ...", None))
         thread.start_new_thread(self.recor.receive, ())
         thread.start_new_thread(self.gettingRecdData, ())
         
@@ -62,7 +78,7 @@ class StartQT4(QtGui.QMainWindow):
             thread.start_new_thread(self.lowPassRun, ())
         else:
             self.filterRunningAllowed = False
-            self.ui.Prompt.setText("Filtr dolnoprzepustowy wylaczony")
+            self.ui.Prompt.setText(_translate("MainWindow", "Filtr dolnoprzepustowy wyłączony", None))
             
         self.lowPassFilterRunCounter += 1
         time.sleep(0.2)
@@ -86,8 +102,8 @@ class StartQT4(QtGui.QMainWindow):
                 
                 if self.recor.flagR:  
                     if usedData != tempData:
-                        if not self.ui.Prompt.text() == "Rozpoczeto zapis do pliku":
-                            self.ui.Prompt.setText("Rozpoczeto zapis do pliku")
+                        if not self.ui.Prompt.text() == "Rozpoczęto zapis do pliku":
+                            self.ui.Prompt.setText(_translate("MainWindow", "Rozpoczęto zapis do pliku", None))
                         
                         fs.setData(usedData)
                         fs.runMp3()
@@ -105,8 +121,8 @@ class StartQT4(QtGui.QMainWindow):
                     if self.recor.flagR: 
                         if not self.data == tempData:
                             if not fs.fileName == 'temp.wav':
-                                if not self.ui.Prompt.text() == "Rozpoczeto zapis do pliku":
-                                    self.ui.Prompt.setText("Rozpoczeto zapis do pliku")
+                                if not self.ui.Prompt.text() == "Rozpoczęto zapis do pliku":
+                                    self.ui.Prompt.setText(_translate("MainWindow", "Rozpoczęto zapis do pliku", None))
                             
                             fs.setData(self.data)
                             fs.runWav()
@@ -132,8 +148,8 @@ class StartQT4(QtGui.QMainWindow):
                 if self.recor.flagR: 
                     if not usedData == tempData:
                         if not fs.fileName == 'temp.wav':
-                            if not self.ui.Prompt.text() == "Rozpoczeto zapis do pliku":
-                                self.ui.Prompt.setText("Rozpoczeto zapis do pliku")
+                            if not self.ui.Prompt.text() == "Rozpoczęto zapis do pliku":
+                                self.ui.Prompt.setText(_translate("MainWindow", "Rozpoczęto zapis do pliku", None))
                         
                         fs.setData(usedData)
                         fs.runWav()
@@ -169,7 +185,7 @@ class StartQT4(QtGui.QMainWindow):
             thread.start_new_thread(savingMp3, ())
             
         else:
-            self.ui.Prompt.setText("Nieobslugiwany format pliku")
+            self.ui.Prompt.setText(_translate("MainWindow", "Nieobsługiwany format pliku", None))
  
     def gettingRecdData(self):
         while True:
@@ -180,9 +196,17 @@ class StartQT4(QtGui.QMainWindow):
                         break
             if not self.recor.flagA:
                 break
-                
+    
+    def eqinit(self):
+        self.myeq = StartEQ()
+        self.myeq.show()
         
         
+class StartEQ(QtGui.QWidget, Eq_Form):
+
+    def __init__(self, parent=None):
+        QtGui.QWidget.__init__(self, parent)
+        self.setupUi(self)        
         
                 
 if __name__ == "__main__":
