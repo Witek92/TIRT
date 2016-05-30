@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import matplotlib.pyplot as plt
 import numpy as np
 import wave
@@ -5,6 +8,21 @@ import sys
 import math
 import contextlib
 from Tkinter import *
+from PyQt4 import QtCore, QtGui
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 def lowPassRun(self):
   
@@ -41,7 +59,7 @@ def lowPassRun(self):
     
     filePos = 0
     
-    self.ui.Prompt.setText("Filtr dolnoprzepustowy dziala")
+    self.ui.Prompt.setText(_translate("MainWindow", "Filtr dolnoprzepustowy włączony", None))
     
     tempData = ''
     while True:
