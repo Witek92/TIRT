@@ -3,7 +3,7 @@ import wave
 import math
 from scipy.io.wavfile import *
 
-
+# JESZCZE NIE DZIALA
 
 def echoR(self):
 

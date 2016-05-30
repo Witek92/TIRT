@@ -12,13 +12,18 @@ from gui import Ui_MainWindow
 from tcpsender import TcpSend
 from tcprec import TcpRec
 import audioAnalysis
+from guiEQ1 import Eq_Form
+from dolnoPrzepustowy import lowPassRun
+from gornoPrzepustowy import highPassRun
+from echo import echoR
+from equalizer import eqRun
+
 from FileSaver import FileSaver
 
 class StartQT4(QtGui.QMainWindow):
     
-    from dolnoPrzepustowy import lowPassRun
-    from gornoPrzepustowy import highPassRun
-    from echo import echoR
+    from equalizer import eqRun
+
 
     
     def __init__(self, parent=None):
@@ -31,6 +36,10 @@ class StartQT4(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.lowPass, QtCore.SIGNAL("clicked()"), self.lowPassFilter)
         QtCore.QObject.connect(self.ui.highPass, QtCore.SIGNAL("clicked()"), self.highPassFilter)
         QtCore.QObject.connect(self.ui.echo,QtCore.SIGNAL("clicked()"), self.echoRun)
+        QtCore.QObject.connect(self.ui.buttonEqualizer, QtCore.SIGNAL("clicked()"), self.eqinit)
+        #QtCore.QObject.connect(self.ui.buttonEqualizer, QtCore.SIGNAL("clicked()"), self.eqR)
+
+
 
         #QtCore.QObject.connect(self.ui.FilePlayer, QtCore.SIGNAL("clicked()"), self.audioPlayer)
         QtCore.QObject.connect(self.ui.fileSaver, QtCore.SIGNAL("clicked()"), self.savingFile)
@@ -40,6 +49,8 @@ class StartQT4(QtGui.QMainWindow):
         self.lowPassFilterRunCounter = 0
         self.highPassFilterRunCounter = 0
         self.echoRunCounter = 0
+        self.eqRunCounter = 0
+
         self.filterRunningAllowed = True
         
     def sending(self):            
@@ -72,9 +83,27 @@ class StartQT4(QtGui.QMainWindow):
         time.sleep(0.2)
         self.filterRunningAllowed = True
 
+    def eqR(self):
+        if self.eqRunCounter%2 == 0:
+            self.savingFile('temp.wav')
+            time.sleep(0.2)
+            thread.start_new_thread(self.eqRun, ())
+        else:
+            self.filterRunningAllowed = False
+            self.ui.Prompt.setText("Eq wylaczone")
+
+        self.eqRunCounter += 1
+        time.sleep(0.2)
+        self.filterRunningAllowed = True
+
     def freqPlotting(self):
         self.savingFile('temp.wav')
-        audioAnalysis.run() 
+        audioAnalysis.run()
+
+    def eqinit(self):
+        self.myeq = StartEQ()
+        self.myeq.show()
+        self.eqR()
     
     def lowPassFilter(self):
         if self.lowPassFilterRunCounter%2 == 0:
@@ -216,7 +245,12 @@ class StartQT4(QtGui.QMainWindow):
             if not self.recor.flagA:
                 break
                 
-        
+class StartEQ(QtGui.QWidget, Eq_Form):
+
+    def __init__(self, parent=None):
+         QtGui.QWidget.__init__(self, parent)
+         self.setupUi(self)
+
         
         
                 

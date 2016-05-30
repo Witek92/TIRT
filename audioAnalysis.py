@@ -15,8 +15,10 @@ def plotSpectru(y,Fs,s):
     Y = Y[range(n/2)]
 
     s.plot(frq,abs(Y),'b') # plotting the spectrum
-    #fig.xlabel('Czestotliwosc (Hz)')
-    #fig.ylabel('|Y(freq)|')
+    plt.xlabel('Czestotliwosc (Hz)')
+    plt.ylabel('|Y(freq)|')
+
+    #s.suptitle('Plik po odebraniu.');
 
 def run():
     Fs = 44100;  # sampling rate
@@ -35,16 +37,21 @@ def run():
     s4 = fig.add_subplot(224)
     s1.plot(t1, y1, 'r-') # Returns a tuple of line objects, thus the comma
         
-    #fig1.xlabel('Czas')
-    #fig1.ylabel('Amplituda')
-    #fig1.title('Plik przed wyslaniem.')
+    fig.suptitle('Plik przed wyslaniem.          Plik po odebraniu.')
+    plt.xlabel('Czas')
+    plt.ylabel('Amplituda')
+
+
 
     plotSpectru(y1,Fs,s3)
-    
+
+
     fig.show()
     
     rate2,data2=read('temp.wav')
     rate1,data1=read('file.wav')
+
+
     
     while len(data2) != len(data1):
         rate2,data2=read('temp.wav')
@@ -61,6 +68,8 @@ def run():
         #fig4.xlabel('Czas')
         #fig4.ylabel('Amplituda')
         #fig4.title('Plik po odebraniu.')
+
+
       
         
         
