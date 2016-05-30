@@ -73,6 +73,18 @@ class Ui_MainWindow(object):
         self.lowPass = QtGui.QPushButton(self.centralwidget)
         self.lowPass.setGeometry(QtCore.QRect(450, 130, 131, 31))
         self.lowPass.setObjectName(_fromUtf8("lowPass"))
+
+        self.highPass = QtGui.QPushButton(self.centralwidget)
+        self.highPass.setGeometry(QtCore.QRect(450, 170, 131, 31))
+        self.highPass.setObjectName(_fromUtf8("highPass"))
+
+        self.echo=QtGui.QPushButton(self.centralwidget)
+        self.echo.setGeometry(QtCore.QRect(450, 210, 131, 31))
+        self.echo.setObjectName(_fromUtf8("echo"))
+
+
+
+
         self.Prompt = QtGui.QLabel(self.centralwidget)
         self.Prompt.setGeometry(QtCore.QRect(80, 20, 211, 51))
         font = QtGui.QFont()
@@ -86,6 +98,11 @@ class Ui_MainWindow(object):
         self.cutFreq = QtGui.QLineEdit(self.centralwidget)
         self.cutFreq.setGeometry(QtCore.QRect(380, 130, 61, 31))
         self.cutFreq.setObjectName(_fromUtf8("cutFreq"))
+
+        self.cutFreqhigh = QtGui.QLineEdit(self.centralwidget)
+        self.cutFreqhigh.setGeometry(QtCore.QRect(380, 170, 61, 31))
+        self.cutFreqhigh.setObjectName(_fromUtf8("cutFreqHigh"))
+
         self.BoxReceiver.raise_()
         self.BoxSender.raise_()
         self.sendTool.raise_()
@@ -95,9 +112,11 @@ class Ui_MainWindow(object):
         self.FilePlayer.raise_()
         self.analyse.raise_()
         self.lowPass.raise_()
+        self.highPass.raise_()
         self.PromptFrame.raise_()
         self.Prompt.raise_()
         self.cutFreq.raise_()
+        self.cutFreqhigh.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -121,6 +140,10 @@ class Ui_MainWindow(object):
         self.FilePlayer.setText(_translate("MainWindow", "Odtwórz", None))
         self.analyse.setText(_translate("MainWindow", "Analiza dżwięku", None))
         self.lowPass.setText(_translate("MainWindow", "Filtr dolnoprzepustowy", None))
+        self.highPass.setText(_translate("MainWindow", "Filtr gornoprzepustowy", None))
         self.Prompt.setText(_translate("MainWindow", "<html><head/><body><p><br/></p></body></html>", None))
-        self.cutFreq.setText(_translate("MainWindow", "400.0", None))
+        self.cutFreq.setText(_translate("MainWindow", "500.0", None))
+        self.cutFreqhigh.setText(_translate("MainWindow", "1250.0", None))
+        self.echo.setText(_translate("MainWindow", "Echo", None))
+
 
