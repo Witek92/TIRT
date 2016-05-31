@@ -4,23 +4,28 @@ from numpy import sin, linspace, pi
 from scipy.io.wavfile import read,write
 import matplotlib.pyplot as plt
 
-def plotSpectru(y,Fs,s):
-    n = len(y) # lungime semnal
-    k = arange(n)
-    T = n/Fs
-    frq = k/T # two sides frequency range
-    frq = frq[range(n/2)] # one side frequency range
-
-    Y = fft(y)/n # fft computing and normalization
-    Y = Y[range(n/2)]
-
-    s.plot(frq,abs(Y),'b') # plotting the spectrum
-    plt.xlabel('Czestotliwosc (Hz)')
-    plt.ylabel('|Y(freq)|')
-
-    #s.suptitle('Plik po odebraniu.');
-
-def run():
+def audioAnalysisRun(self):
+    
+    def plotSpectru(y,Fs,s):
+        n = len(y) # lungime semnal
+        k = arange(n)
+        T = n/Fs
+        frq = k/T # two sides frequency range
+        frq = frq[range(n/2)] # one side frequency range
+        
+        try:
+            Y = fft(y)/n # fft computing and normalization
+        except ValueError:
+            return 
+        
+        Y = Y[range(n/2)]
+    
+        s.plot(frq,abs(Y),'b') # plotting the spectrum
+        plt.xlabel('Czestotliwosc (Hz)')
+        plt.ylabel('|Y(freq)|')
+    
+        #s.suptitle('Plik po odebraniu.');
+        
     Fs = 44100;  # sampling rate
 
     rate1,data1=read('file.wav')
@@ -40,20 +45,16 @@ def run():
     fig.suptitle('Plik przed wyslaniem.          Plik po odebraniu.')
     plt.xlabel('Czas')
     plt.ylabel('Amplituda')
-
-
-
     plotSpectru(y1,Fs,s3)
-
-
+    
+    
+    
     fig.show()
     
     rate2,data2=read('temp.wav')
     rate1,data1=read('file.wav')
 
-
-    
-    while len(data2) != len(data1):
+    while self.recor.flagA:
         rate2,data2=read('temp.wav')
         y2=data2
         lungime2=len(y2)
@@ -65,6 +66,7 @@ def run():
         plotSpectru(y2,Fs,s4)
         fig.canvas.draw()
         
+    print 'Analysed'
         #fig4.xlabel('Czas')
         #fig4.ylabel('Amplituda')
         #fig4.title('Plik po odebraniu.')

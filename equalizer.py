@@ -54,6 +54,12 @@ def eqRun(self):
 
         return channels
 
+
+    def speedup(sound_array, factor):
+        indices = np.round( np.arange(0, len(sound_array), factor) )
+        indices = indices[indices < len(sound_array)].astype(int)
+        return sound_array[ indices.astype(int) ]
+    
     fname = 'temp.wav'
     filePos = 0
 
@@ -79,9 +85,14 @@ def eqRun(self):
                   filePos += nFrames
                   channels = interpret_wav(signal, nFrames, nChannels, ampWidth, True)
 
+                    #sppedUp
+                  speed=int(self.myeq.sliderSpeed.value())
+                  a=speedup(channels[0],speed)
+                  
+                    #amplifier
                   co=int(self.myeq.sliderAmp.value())
                   channels[0]*=co
-
+                  
                   filtered=channels[0]
                   self.filteredData = filtered.tobytes('C')
                   tempData = self.data

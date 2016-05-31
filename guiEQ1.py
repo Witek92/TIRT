@@ -25,7 +25,7 @@ except AttributeError:
 class Eq_Form(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(606, 256)
+        MainWindow.resize(680, 256)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
 
@@ -102,8 +102,8 @@ class Eq_Form(object):
 
         self.sliderAmp = QtGui.QSlider(self.centralwidget)
         self.sliderAmp.setGeometry(QtCore.QRect(560, 40, 19, 160))
-        self.sliderAmp.setMaximum(100)
-        self.sliderAmp.setProperty("value", 1)
+        self.sliderAmp.setMaximum(4)
+        self.sliderAmp.setProperty("value", 0)
         self.sliderAmp.setOrientation(QtCore.Qt.Vertical)
         self.sliderAmp.setObjectName(_fromUtf8("sliderAmp"))
 
@@ -151,6 +151,21 @@ class Eq_Form(object):
         self.label_6 = QtGui.QLabel(self.centralwidget)
         self.label_6.setGeometry(QtCore.QRect(280, 200, 16, 16))
         self.label_6.setObjectName(_fromUtf8("label_6"))
+        
+        self.sliderSpeed = QtGui.QSlider(self.centralwidget)
+        self.sliderSpeed.setGeometry(QtCore.QRect(620, 40, 19, 160))
+        self.sliderSpeed.setMinimum(1)
+        self.sliderSpeed.setMaximum(5)
+        self.sliderSpeed.setTickInterval(0.2)
+        self.sliderSpeed.setSingleStep(0.2)
+        self.sliderSpeed.setProperty("value", int(1))
+        self.sliderSpeed.setOrientation(QtCore.Qt.Vertical)
+        self.sliderSpeed.setObjectName(_fromUtf8("sliderSpeed"))
+        
+        self.label_12 = QtGui.QLabel(self.centralwidget)
+        self.label_12.setGeometry(QtCore.QRect(610, 200, 50, 16))
+        self.label_12.setObjectName(_fromUtf8("label_11"))
+        
 
         #MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -173,4 +188,4 @@ class Eq_Form(object):
         self.label_10.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">16k</span></p></body></html>", None))
         self.label_9.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">8k</span></p></body></html>", None))
         self.label_6.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">1k</span></p></body></html>", None))
-
+        self.label_12.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600;\">SpeedUp</span></p></body></html>", None))
