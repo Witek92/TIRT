@@ -102,7 +102,7 @@ class Eq_Form(object):
 
         self.sliderAmp = QtGui.QSlider(self.centralwidget)
         self.sliderAmp.setGeometry(QtCore.QRect(560, 40, 19, 160))
-        self.sliderAmp.setMaximum(100)
+        self.sliderAmp.setMaximum(5)
         self.sliderAmp.setProperty("value", 1)
         self.sliderAmp.setOrientation(QtCore.Qt.Vertical)
         self.sliderAmp.setObjectName(_fromUtf8("sliderAmp"))
