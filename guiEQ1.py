@@ -117,8 +117,7 @@ class Eq_Form(object):
         self.sliderSpeed.setGeometry(QtCore.QRect(620, 40, 19, 160))
         self.sliderSpeed.setMinimum(1)
         self.sliderSpeed.setMaximum(5)
-        self.sliderSpeed.setTickInterval(0.2)
-        self.sliderSpeed.setSingleStep(0.2)
+
         self.sliderSpeed.setProperty("value", int(1))
         self.sliderSpeed.setOrientation(QtCore.Qt.Vertical)
         self.sliderSpeed.setObjectName(_fromUtf8("sliderSpeed"))

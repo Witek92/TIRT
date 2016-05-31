@@ -3,29 +3,19 @@
 
 import sys
 import thread
-import threading
 import time
-import pyaudio
-import wave
+
 from PyQt4 import QtCore, QtGui
-from gui import Ui_MainWindow
-from tcpsender import TcpSend
-from tcprec import TcpRec
+
 import audioAnalysis
-from guiEQ1 import Eq_Form
-from equalizer import Equalizer
-from threading import Thread
-
-
-
-
-
 from FileSaver import FileSaver
+from gui import Ui_MainWindow
+from guiEQ1 import Eq_Form
+from tcprec import TcpRec
+from tcpsender import TcpSend
+
 
 class StartQT4(QtGui.QMainWindow):
-
-
-    
     def __init__(self, parent=None):
         QtGui.QWidget.__init__(self, parent)
         self.ui = Ui_MainWindow()
@@ -36,7 +26,7 @@ class StartQT4(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.lowPass, QtCore.SIGNAL("clicked()"), self.lowPassFilter)
         QtCore.QObject.connect(self.ui.highPass, QtCore.SIGNAL("clicked()"), self.highPassFilter)
         QtCore.QObject.connect(self.ui.echo,QtCore.SIGNAL("clicked()"), self.echoRun)
-        QtCore.QObject.connect(self.ui.buttonEqualizer, QtCore.SIGNAL("clicked()"), self.eqinitThread)
+        QtCore.QObject.connect(self.ui.buttonEqualizer, QtCore.SIGNAL("clicked()"), self.eqinit)
 
         #QtCore.QObject.connect(self.ui.buttonEqualizer, QtCore.SIGNAL("clicked()"), self.eqR)
 
@@ -89,9 +79,7 @@ class StartQT4(QtGui.QMainWindow):
         if self.eqRunCounter%2 == 0:
             self.savingFile('temp.wav')
             time.sleep(0.2)
-            thread2=Equalizer(self)
-            thread2.start()
-
+            thread.start_new_thread(self.eqRun, ())
         else:
             self.filterRunningAllowed = False
             self.ui.Prompt.setText("Eq wylaczone")
@@ -105,20 +93,10 @@ class StartQT4(QtGui.QMainWindow):
         audioAnalysis.run()
 
     def eqinit(self):
-
         self.myeq = StartEQ()
         self.myeq.show()
         #self.eqR()
-        #self.speedinit()
-
-    def eqinitThread(self):
-        thread1=StartEQ()
-        thread1.start()
-        self.eqR()
-
-
-
-
+        self.speedinit()
     def speedinit(self):
         if self.speedRunCounter%2 == 0:
             self.savingFile('temp.wav')
@@ -271,18 +249,12 @@ class StartQT4(QtGui.QMainWindow):
                         break
             if not self.recor.flagA:
                 break
-
-
                 
-class StartEQ(QtGui.QWidget, Eq_Form, threading.Thread):
+class StartEQ(QtGui.QWidget, Eq_Form):
 
     def __init__(self, parent=None):
-         threading.Thread.__init__(self)
          QtGui.QWidget.__init__(self, parent)
          self.setupUi(self)
-
-    def run(self):
-        self.show()
 
         
         
