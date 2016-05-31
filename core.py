@@ -13,16 +13,17 @@ from tcpsender import TcpSend
 from tcprec import TcpRec
 import audioAnalysis
 from guiEQ1 import Eq_Form
-from echo import echoR
+from equalizer import Equalizer
+from threading import Thread
+
+
+
 
 
 from FileSaver import FileSaver
 
 class StartQT4(QtGui.QMainWindow):
-    
-    from equalizer import eqRun
-    from gornoPrzepustowy import highPassRun
-    from dolnoPrzepustowy import lowPassRun
+
 
     
     def __init__(self, parent=None):
@@ -35,7 +36,8 @@ class StartQT4(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.lowPass, QtCore.SIGNAL("clicked()"), self.lowPassFilter)
         QtCore.QObject.connect(self.ui.highPass, QtCore.SIGNAL("clicked()"), self.highPassFilter)
         QtCore.QObject.connect(self.ui.echo,QtCore.SIGNAL("clicked()"), self.echoRun)
-        QtCore.QObject.connect(self.ui.buttonEqualizer, QtCore.SIGNAL("clicked()"), self.eqinit)
+        QtCore.QObject.connect(self.ui.buttonEqualizer, QtCore.SIGNAL("clicked()"), self.eqinitThread)
+
         #QtCore.QObject.connect(self.ui.buttonEqualizer, QtCore.SIGNAL("clicked()"), self.eqR)
 
 
@@ -49,6 +51,7 @@ class StartQT4(QtGui.QMainWindow):
         self.highPassFilterRunCounter = 0
         self.echoRunCounter = 0
         self.eqRunCounter = 0
+        self.speedRunCounter=0
 
         self.filterRunningAllowed = True
         
@@ -86,7 +89,9 @@ class StartQT4(QtGui.QMainWindow):
         if self.eqRunCounter%2 == 0:
             self.savingFile('temp.wav')
             time.sleep(0.2)
-            thread.start_new_thread(self.eqRun, ())
+            thread2=Equalizer(self)
+            thread2.start()
+
         else:
             self.filterRunningAllowed = False
             self.ui.Prompt.setText("Eq wylaczone")
@@ -100,9 +105,32 @@ class StartQT4(QtGui.QMainWindow):
         audioAnalysis.run()
 
     def eqinit(self):
+
         self.myeq = StartEQ()
         self.myeq.show()
+        #self.eqR()
+        #self.speedinit()
+
+    def eqinitThread(self):
+        thread1=StartEQ()
+        thread1.start()
         self.eqR()
+
+
+
+
+    def speedinit(self):
+        if self.speedRunCounter%2 == 0:
+            self.savingFile('temp.wav')
+            time.sleep(0.2)
+            thread.start_new_thread(self.speedRun, ())
+        else:
+            self.filterRunningAllowed = False
+            self.ui.Prompt.setText("Echo wylaczone")
+
+        self.speedRunCounter += 1
+        time.sleep(0.2)
+        self.filterRunningAllowed = True
     
     def lowPassFilter(self):
         if self.lowPassFilterRunCounter%2 == 0:
@@ -243,12 +271,18 @@ class StartQT4(QtGui.QMainWindow):
                         break
             if not self.recor.flagA:
                 break
+
+
                 
-class StartEQ(QtGui.QWidget, Eq_Form):
+class StartEQ(QtGui.QWidget, Eq_Form, threading.Thread):
 
     def __init__(self, parent=None):
+         threading.Thread.__init__(self)
          QtGui.QWidget.__init__(self, parent)
          self.setupUi(self)
+
+    def run(self):
+        self.show()
 
         
         
