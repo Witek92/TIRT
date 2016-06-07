@@ -26,11 +26,20 @@ except AttributeError:
         return QtGui.QApplication.translate(context, text, disambig)
 
 
-def eqRun(self):
+
+
+def speedRun(self):
     # from http://stackoverflow.com/questions/13728392/moving-average-or-running-mean
     def running_mean(x, windowSize):
       cumsum = np.cumsum(np.insert(x, 0, 0))
       return (cumsum[windowSize:] - cumsum[:-windowSize]) / windowSize
+
+    def speedValueChanged():
+        if int(self.myeq.sliderSpeed.value())!=1:
+            return True
+        else:
+            return False
+
 
     # from http://stackoverflow.com/questions/2226853/interpreting-wav-data/2227174#2227174
     def interpret_wav(raw_bytes, n_frames, n_channels, sample_width, interleaved = True):
@@ -54,52 +63,48 @@ def eqRun(self):
 
         return channels
 
-
     def speedup(sound_array, factor):
         indices = np.round( np.arange(0, len(sound_array), factor) )
         indices = indices[indices < len(sound_array)].astype(int)
         return sound_array[ indices.astype(int) ]
-    
+
     fname = 'temp.wav'
     filePos = 0
 
     tempData = ''
     while True:
-        if self.filterRunningAllowed:
-            if self.recor.flagR:
-              if self.data != tempData:
-                  try:
-                      spf = wave.open(fname,'rb')
-                  except EOFError:
-                      break
+        if speedValueChanged():
+            if self.filterRunningAllowed:
+                if self.recor.flagR:
+                  if self.data != tempData:
+                      try:
+                          spf = wave.open(fname,'rb')
+                      except EOFError:
+                          break
 
-                  sampleRate = spf.getframerate()
-                  ampWidth = spf.getsampwidth()
-                  nChannels = spf.getnchannels()
-                  nFrames = 512
+                      sampleRate = spf.getframerate()
+                      ampWidth = spf.getsampwidth()
+                      nChannels = spf.getnchannels()
+                      nFrames = 512
 
-                  spf.setpos(filePos)
-                  # Extract Raw Audio from multi-channel Wav File
-                  signal = spf.readframes(nFrames*nChannels)
-                  spf.close()
-                  filePos += nFrames
-                  channels = interpret_wav(signal, nFrames, nChannels, ampWidth, True)
+                      spf.setpos(filePos)
+                      # Extract Raw Audio from multi-channel Wav File
+                      signal = spf.readframes(nFrames*nChannels)
+                      spf.close()
+                      filePos += nFrames
+                      channels = interpret_wav(signal, nFrames, nChannels, ampWidth, True)
 
-                    #speedUp
-                  speed=int(self.myeq.sliderSpeed.value())
-                  a=speedup(channels[0],speed)
-                  
-                    #amplifier
-                  co=int(self.myeq.sliderAmp.value())
-                  channels[0]*=co
-                  
-                  filtered=channels[0]
-                  self.filteredData = filtered.tobytes('C')
-                  tempData = self.data
+                      speed=int(self.myeq.sliderSpeed.value())
 
+                      a=speedup(channels[0],speed)
+
+                      filtered=a
+                      self.filteredData = filtered.tobytes('C')
+                      tempData = self.data
+
+                else:
+                  self.filteredData = ''
+                  break
             else:
-              self.filteredData = ''
-              break
-        else:
-            break
+                break
 

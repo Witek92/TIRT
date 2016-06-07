@@ -209,11 +209,11 @@ class StartQT4(QtGui.QMainWindow):
                         if not fs.fileName == 'temp.wav':
                             if not self.ui.Prompt.text() == "Rozpoczęto zapis do pliku":
                                 self.ui.Prompt.setText(_translate("MainWindow", "Rozpoczęto zapis do pliku", None))
-                        
+                                
+                        tempData = usedData
                         fs.setData(usedData)
                         fs.runWav()
                         print 'Saved chunk to a file'
-                        tempData = usedData
                         
                 if not self.recor.flagA:
                     fs.closeFile()
@@ -254,7 +254,7 @@ class StartQT4(QtGui.QMainWindow):
                     if self.recor.getData() == '':
                         break
             if not self.recor.flagA:
-                self.ui.Prompt.setText(_translate("MainWindow", "Odbieranie zakończone", None))
+                #self.ui.Prompt.setText(_translate("MainWindow", "Odbieranie zakończone", None))
                 break
                 
 class StartEQ(QtGui.QWidget, Eq_Form):
